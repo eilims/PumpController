@@ -2,3 +2,9 @@
 LinkedList/\.idea/
 
 LinkedList/cmake-build-debug/
+
+LinkedList/CMakeLists.txt
+
+LinkedList/UnitTests.cpp
+
+LinkedList/main.cpp
