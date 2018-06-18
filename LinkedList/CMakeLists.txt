@@ -10,4 +10,5 @@ set(CMAKE_CXX_STANDARD 11)
 
 include_directories(${arduino_INCLUDE_DIRECTORIES})
 
-add_executable(LinkedList main.cpp LinkedList.h LinkedList.cpp Node.h Node.cpp )
+#add_executable(LinkedList UnitTests.cpp LinkedList.h LinkedList.cpp Node.h Node.cpp Sensor.cpp Sensor.h)
+add_executable(LinkedList UnitTests.cpp LinkedList.h LinkedList.cpp Node.h Node.cpp)

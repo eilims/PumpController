@@ -37,7 +37,7 @@ int LinkedList<T>::insertItem(T *item) {
 //Returns the item inside the node with the corresponding id
 //Returns NULL if no node with a corresponding id is found
 template<class T>
-T* LinkedList<T>::findItem(int id) {
+T *LinkedList<T>::findItem(int id) {
     //Searches for the node via id from the head recursively
     return findItem(id, this->head);
 }
@@ -45,15 +45,16 @@ T* LinkedList<T>::findItem(int id) {
 //Returns the item inside the deleted node
 //Returns NULL if no node with the corresponding id is found
 template<class T>
-T* LinkedList<T>::removeItem(int id) {
+T *LinkedList<T>::removeItem(int id) {
     //Case for if the head is the node to be deleted
     if (this->head->getId() == id) {
         Node<T> *temp = this->head;
-        T* item = temp->getItem();
+        T *item = temp->getItem();
         this->head = temp->getNext();
         delete temp;
+        this->length--;
         return item;
-    //Case for if any other node is to be deleted
+        //Case for if any other node is to be deleted
     } else {
         //Searches for the node to be deleted recursively from the head
         return removeItem(id, this->head);
@@ -65,10 +66,10 @@ T* LinkedList<T>::removeItem(int id) {
 template<class T>
 int LinkedList<T>::insertItem(Node<T> *item) {
     //Condition for empty list
-    if(this->head == NULL) {
+    if (this->head == NULL) {
         this->head = item;
         this->tail = item;
-    //Condition for non empty list
+        //Condition for non empty list
     } else {
         this->tail->setNext(item);
         this->tail = item;
@@ -76,40 +77,41 @@ int LinkedList<T>::insertItem(Node<T> *item) {
 }
 
 template<class T>
-T* LinkedList<T>::findItem(int id, Node<T> *current) {
+T *LinkedList<T>::findItem(int id, Node<T> *current) {
     //If the current node is empty this implies the id was not found
-    if(current == NULL){
+    if (current == NULL) {
         return NULL;
-    //If the current node id matches return the T object not its pointer
+        //If the current node id matches return the T object not its pointer
     } else if (current->getId() == id) {
         return current->getItem();
-    //If the current node is not a match for the id and is not NULL move one step into the list
+        //If the current node is not a match for the id and is not NULL move one step into the list
     } else {
         return findItem(id, current->getNext());
     }
 }
 
 template<class T>
-T* LinkedList<T>::removeItem(int id, Node<T> *current) {
+T *LinkedList<T>::removeItem(int id, Node<T> *current) {
     //If the next node is NULL this implies the entire list has been searched
     if (current->getNext() == NULL) {
         return NULL;
-    //If the next node is a match
+        //If the next node is a match
     } else if (current->getNext()->getId() == id) {
         //Create temp for reference
         Node<T> *temp = current->getNext();
         //Get item pointer
-        T* item = temp->getItem();
+        T *item = temp->getItem();
         //Skip over node to be deleted
         current->setNext(temp->getNext());
         //Set tail if the tail node is being deleted
-        if(temp == this->tail){
+        if (temp == this->tail) {
             this->tail = current;
         }
         //Free node memory location
         delete temp;
+        this->length--;
         return item;
-    //If the next node is not to be deleted and is not NULL move one step into the lust
+        //If the next node is not to be deleted and is not NULL move one step into the lust
     } else {
         return removeItem(id, current->getNext());
     }
@@ -118,12 +120,12 @@ T* LinkedList<T>::removeItem(int id, Node<T> *current) {
 //Getters
 
 template<class T>
-T* LinkedList<T>::getHead() {
+T *LinkedList<T>::getHead() {
     return this->head->getItem();
 }
 
 template<class T>
-T* LinkedList<T>::getTail() {
+T *LinkedList<T>::getTail() {
     return this->tail->getItem();
 }
 
