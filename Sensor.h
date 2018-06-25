@@ -5,9 +5,9 @@
 #ifndef LINKEDLIST_SENSOR_H
 #define LINKEDLIST_SENSOR_H
 
-//#include <windef.h>
-//#include <cstdint>
-#include <Arduino.h>
+#include <windef.h>
+#include <cstdint>
+//#include <Arduino.h>
 
 class Sensor {
 
