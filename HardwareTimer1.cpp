@@ -5,18 +5,21 @@
 
 #include "HardwareTimer1.h"
 
+HardwareTimer1* HardwareTimer1::instance = NULL;
+
+//Private methods
+
 HardwareTimer1::HardwareTimer1() {
     uint8_t temp;
+	
     //Disable interrupts during setup
     noInterrupts();
-
 
     //Need 1100 XX10
     //Selecting compare output modes: OCA-> set on match, OCB->disabled
     //Selecting waveform (bits 1 - 0): generation mode -> 4 (CTC)
     temp = TCCR1A;
     temp = temp & 0x0C;
-    Serial.println(temp);
     TCCR1A = temp | 0xC0;
 
     //Need 00XX 0111
@@ -35,7 +38,7 @@ HardwareTimer1::HardwareTimer1() {
 
     //Set current count to Zero
     TCNT1 = 0;
-
+	
     //Set count top value as 65,535
     OCR1A = 0xFFFF;
 
@@ -54,48 +57,117 @@ HardwareTimer1::~HardwareTimer1() {
 
 }
 
-void HardwareTimer1::startTimer1() {
-    //Eanble clock prescaler
-    CLKPR = 0x80;
-    CLKPR = this->prescaleEnable256;
 
+
+
+//Public methods
+
+//Singleton method
+HardwareTimer1* HardwareTimer1::Instance() {
+    if(HardwareTimer1::instance == NULL){
+        HardwareTimer1::instance = new HardwareTimer1();
+    }
+    return HardwareTimer1::instance;
+}
+
+void HardwareTimer1::startTimer1(int state) {
+	noInterrupts();
+    //Changes the global clock speed down to allow for longer/shorter timer durations
+    CLKPR = 0x80;
+	//see http://ww1.microchip.com/downloads/en/DeviceDoc/Atmel-42735-8-bit-AVR-Microcontroller-ATmega328-328P_Datasheet.pdf
+	//For a breakdown of the Clock prescalar select on page 60
+	switch(state){
+		case 0:
+			CLKPR = 0x00;
+			break;
+		case 8: 
+			CLKPR = 0x08;
+			break;
+		default:
+			CLKPR = 0x00;
+			break;
+	}
+	
     //Enable timer
-    temp = TCCR1B;
+    uint8_t temp = TCCR1B;
     temp = temp & 0x20;
     TCCR1B = temp | this->enableClock;
+	interrupts();
 }
 
 void HardwareTimer1::stopTimer1() {
-    //disable clock prescaler
+	noInterrupts();
+    //Changes the global clock speed down to allow for longer/shorter timer durations
     CLKPR = 0x80;
-    CLKPR = this->prescaleDisable;
-
-    //disable timer
-    temp = TCCR1B;
+	//see http://ww1.microchip.com/downloads/en/DeviceDoc/Atmel-42735-8-bit-AVR-Microcontroller-ATmega328-328P_Datasheet.pdf
+	//For a breakdown of the Clock prescalar select on page 60
+	//returning speed back to normal for other operations
+	CLKPR = 0x00;
+	
+    //disable timer by changing clock source to nothing
+    uint8_t temp = TCCR1B;
     temp = temp & 0x20;
     TCCR1B = temp | this->disableClock;
+	interrupts();
 }
 
 void HardwareTimer1::resetCount() {
     TCNT1 = 0;
 }
 
-int HardwareTimer1::getTimerCompare() const {
-    return timerCompare;
+void HardwareTimer1::incrementGlobalCounter() {
+    this->timerCount++;
 }
 
-void HardwareTimer1::setTimerCompare(int timerCompare) {
-    HardwareTimer1::timerCompare = timerCompare;
+void HardwareTimer1::resetGlobalCounter() {
+    this->timerCount = 0;
 }
 
-int HardwareTimer1::getTimerCount() const {
+
+
+
+//Getters
+int HardwareTimer1::getGlobalTimerCount() {
     return timerCount;
 }
 
+int HardwareTimer1::getGlobalTimerCompare() {
+    return timerCompare;
+}
+
+uint16_t HardwareTimer1::getOcaValue(){
+	return ocaValue;
+}
+
+callback_function HardwareTimer1::getTimerInterruptCallback() {
+    return timerInterruptCallback;
+}
+
+
+
+
+//Setters
+void HardwareTimer1::setTimerInterruptCallback(callback_function timerInterruptCallback) {
+    this->timerInterruptCallback = timerInterruptCallback;
+}
+
+void HardwareTimer1::setOcaValue(uint16_t ocaValue){
+	OCR1A = ocaValue;
+	this->ocaValue = ocaValue;
+}
+
+void HardwareTimer1::setGlobalTimerCompare(int timerCompare){
+	this->timerCompare = timerCompare;
+}
+
+
+//This ISR will trigger on the OCR1A Interrupt
+//If properly configured the program will gop to the function passed in through setTimerInterruptCallback
 ISR(TIMER1_COMPA_vect){
-    if(this->timerCount >= this->timerCompare){
-        //Call something here
+    if(HardwareTimer1::Instance()->getGlobalTimerCompare() <= HardwareTimer1::Instance()->getGlobalTimerCount() ){
+        HardwareTimer1::Instance()->getTimerInterruptCallback()();
+		HardwareTimer1::Instance()->resetGlobalCounter();
     } else {
-        this->timerCount++;
+        HardwareTimer1::Instance()->incrementGlobalCounter();
     }
 }
