@@ -20,7 +20,7 @@ public:
     Pump(uint8_t enablePin, uint8_t topControlPin, uint8_t bottomControlPin);
     ~Pump();
 
-    void turnOnPump(int timeInMilliSeconds, uint8_t waterStrength, uint8_t fluctuationAmount, uint8_t waterStrengthLowerLimit, int intervalTime);
+    void runPump(int timeInMilliSeconds, uint8_t waterStrength, uint8_t fluctuationAmount, uint8_t waterStrengthLowerLimit, int intervalTime);
     void turnOffPump();
 
     uint8_t getEnablePin();
