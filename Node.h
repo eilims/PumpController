@@ -6,6 +6,7 @@
 #define LINKEDLIST_NODE_H
 
 #include <Arduino.h>
+#include "Sensor.h"
 //#include <windef.h>
 
 template <class T>

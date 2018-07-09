@@ -31,6 +31,8 @@ public:
 
     int updateDataViaMacAddress();
 
+	
+	//Getters
     uint8_t getPowerPin();
 
     uint8_t getDataPin();
@@ -41,6 +43,8 @@ public:
 
     char *getSensorType();
 
+	
+	//Setters
     void setDataPin(uint8_t dataPin);
 
     void setPowerPin(uint8_t powerPin);

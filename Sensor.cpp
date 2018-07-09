@@ -33,8 +33,9 @@ Sensor::~Sensor() {
 
 int Sensor::updateDataViaPin() {
     digitalWrite(powerPin, HIGH);
-    delay(100);
+    delay(1000);
     this->data = analogRead(this->dataPin);
+	digitalWrite(powerPin, LOW);
     return this->data;
 }
 

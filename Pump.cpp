@@ -40,7 +40,7 @@ void Pump::runPump(int timeInMilliSeconds, uint8_t maxStrength, uint8_t minimumS
     while ((millis() - this->timer) < timeInMilliSeconds) {
 
         //Check if we need to change the water strength according to the fluctuation amount
-        if ((millis() - lastWaterStrengthChange) > strengthChangeInterval) {
+        if ((millis() - lastStrengthChange) > strengthChangeInterval) {
             //Increase by fluctuation amount when increasing
             if (isIncreasing) {
                 currentStrength += strengthChange;
@@ -52,7 +52,7 @@ void Pump::runPump(int timeInMilliSeconds, uint8_t maxStrength, uint8_t minimumS
             if(currentStrength > maxStrength || currentStrength <= minimumStrength){
                 isIncreasing = !isIncreasing;
             }
-			lastWaterStrengthChange = millis();
+			lastStrengthChange = millis();
         }
 		analogWrite(this->enablePin, currentStrength);
     }

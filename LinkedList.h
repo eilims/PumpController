@@ -6,6 +6,7 @@
 #define LINKEDLIST_LINKEDLIST_H
 
 #include "Node.h"
+#include "Sensor.h"
 //#include <windef.h>
 #include <Arduino.h>
 
@@ -32,10 +33,13 @@ public:
     int insertItem(T* item);
     T* findItem(int id);
     T* removeItem(int id);
+	
 
     //Getters
     T* getHead();
+	Node<T>* getHeadNode();
     T* getTail();
+	Node<T>* getTailNode();
     int getLength();
 
     //Setters are not allowed

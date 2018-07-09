@@ -125,8 +125,18 @@ T *LinkedList<T>::getHead() {
 }
 
 template<class T>
+Node<T> *LinkedList<T>::getHeadNode() {
+    return this->head;
+}
+
+template<class T>
 T *LinkedList<T>::getTail() {
     return this->tail->getItem();
+}
+
+template<class T>
+Node<T> *LinkedList<T>::getTailNode() {
+    return this->tail;
 }
 
 template<class T>
@@ -136,3 +146,5 @@ int LinkedList<T>::getLength() {
 
 template
 class LinkedList<int>;
+template
+class LinkedList<Sensor>;

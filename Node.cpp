@@ -47,3 +47,4 @@ void Node<T>::setItem(T* item) {
 }
 
 template class Node<int>;
+template class Node<Sensor>;
