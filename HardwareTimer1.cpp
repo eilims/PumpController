@@ -54,7 +54,7 @@ HardwareTimer1::HardwareTimer1() {
 }
 
 HardwareTimer1::~HardwareTimer1() {
-
+    delete(instance);
 }
 
 
@@ -123,7 +123,14 @@ void HardwareTimer1::resetGlobalCounter() {
     this->timerCount = 0;
 }
 
-
+void HardwareTimer1::interruptRoutine() {
+    if(this->timerCount >= this->timerCompare){
+        this->timerInterruptCallback();
+        resetGlobalCounter();
+    } else {
+        incrementGlobalCounter();
+    }
+}
 
 
 //Getters
@@ -164,10 +171,5 @@ void HardwareTimer1::setGlobalTimerCompare(int timerCompare){
 //This ISR will trigger on the OCR1A Interrupt
 //If properly configured the program will gop to the function passed in through setTimerInterruptCallback
 ISR(TIMER1_COMPA_vect){
-    if(HardwareTimer1::Instance()->getGlobalTimerCompare() <= HardwareTimer1::Instance()->getGlobalTimerCount() ){
-        HardwareTimer1::Instance()->getTimerInterruptCallback()();
-		HardwareTimer1::Instance()->resetGlobalCounter();
-    } else {
-        HardwareTimer1::Instance()->incrementGlobalCounter();
-    }
+    HardwareTimer1::Instance()->interruptRoutine();
 }

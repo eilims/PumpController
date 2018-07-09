@@ -16,11 +16,15 @@ Pump::~Pump() {
 
 }
 
-void Pump::runPump(int timeInMilliSeconds, uint8_t waterStrength, uint8_t fluctuationAmount, uint8_t waterStrengthLowerLimit, int intervalTime) {
+//Strength refers to an analog value between 0 - 255
+void Pump::runPump(int timeInMilliSeconds, uint8_t maxStrength, uint8_t minimumStrength, uint8_t strengthChange, int strengthChangeInterval) {
+    this->timer = millis();
     //First three variables are used to control the water pressure out of the pump
-	this->timer = millis();
-    uint32_t lastReading = this->timer;
-    uint8_t currentWaterStrength = waterStrengthLowerLimit;
+    //Records time of last insterval change
+    uint32_t lastStrengthChange = this->timer;
+    //Records the current strength of the pump
+    uint8_t currentStrength = minimumStrength;
+    //The strength change is positive when isInreasing is true. Otherwise it is decreasing
 	bool isIncreasing = true;
 		
     //timer is started until the requested watering time is reached
@@ -36,32 +40,22 @@ void Pump::runPump(int timeInMilliSeconds, uint8_t waterStrength, uint8_t fluctu
     while ((millis() - this->timer) < timeInMilliSeconds) {
 
         //Check if we need to change the water strength according to the fluctuation amount
-        if ((millis() - lastReading) > intervalTime) {
+        if ((millis() - lastWaterStrengthChange) > strengthChangeInterval) {
             //Increase by fluctuation amount when increasing
             if (isIncreasing) {
-                currentWaterStrength += fluctuationAmount;
+                currentStrength += strengthChange;
             } else {
-                currentWaterStrength -= fluctuationAmount;
+                currentStrength -= strengthChange;
             }
 
             //Switch directions once in a while
-            if(currentWaterStrength > waterStrength || currentWaterStrength <= waterStrengthLowerLimit){
+            if(currentStrength > maxStrength || currentStrength <= minimumStrength){
                 isIncreasing = !isIncreasing;
             }
-			lastReading = millis();
+			lastWaterStrengthChange = millis();
         }
-		analogWrite(this->enablePin, currentWaterStrength);
+		analogWrite(this->enablePin, currentStrength);
     }
-	Serial.print("TCCR0A: ");
-	Serial.println(TCCR0A);
-	Serial.print("TCCR0B: ");
-	Serial.println(TCCR0B);
-	Serial.print("TIMSK0: ");
-	Serial.println(TIMSK0);
-	Serial.print("OCR0A: ");
-	Serial.println(OCR0A);
-	Serial.print("OCR0B: ");
-	Serial.println(OCR0B);
 	turnOffPump();
 }
 
@@ -70,6 +64,8 @@ void Pump::turnOffPump() {
     digitalWrite(this->topControlPin, LOW);
 }
 
+
+//Getters
 uint8_t Pump::getEnablePin() {
     return this->enablePin;
 }
@@ -82,6 +78,8 @@ uint8_t Pump::getBottomControlPin() {
     return this->bottomControlPin;
 }
 
+
+//Setters
 void Pump::setEnablePin(uint8_t enablePin) {
     this->enablePin = enablePin;
 }

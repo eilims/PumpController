@@ -9,6 +9,8 @@
 //#include <cstdint>
 #include <Arduino.h>
 
+
+//This class utilizes an H-bridge to control a pump.
 class Pump {
 private:
     uint8_t enablePin;
@@ -18,18 +20,29 @@ private:
 
 public:
     Pump(uint8_t enablePin, uint8_t topControlPin, uint8_t bottomControlPin);
+
     ~Pump();
 
-    void runPump(int timeInMilliSeconds, uint8_t waterStrength, uint8_t fluctuationAmount, uint8_t waterStrengthLowerLimit, int intervalTime);
+    void runPump(int timeInMilliSeconds, uint8_t maxStrength, uint8_t minimumStrength, uint8_t strengthChange,
+                 int waterStrengthChangeInterval);
+
     void turnOffPump();
 
-    uint8_t getEnablePin();
-    uint8_t  getTopControlPin();
-    uint8_t  getBottomControlPin();
 
+    //Getters
+    uint8_t getEnablePin();
+
+    uint8_t getTopControlPin();
+
+    uint8_t getBottomControlPin();
+
+
+    //Setters
     void setEnablePin(uint8_t enablePin);
+
     void setTopControlPin(uint8_t topControlPin);
-    void setBottomControlPin(uint8_t  bottomControlPin);
+
+    void setBottomControlPin(uint8_t bottomControlPin);
 };
 
 

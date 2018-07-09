@@ -59,6 +59,9 @@ public:
 	//Resets the global timers count which is recording number of times the ISR has been called
 	void resetGlobalCounter();
 
+	//Performs the interrupt routine function and incrementing if the count is not reached
+	void interruptRoutine();
+
 
 	//Getters
     int getGlobalTimerCount();
@@ -76,7 +79,6 @@ public:
     void setTimerInterruptCallback(callback_function timerInterruptCallback);
 	
 	void setOcaValue(uint16_t ocaValue);
-	
 	
 };
 
