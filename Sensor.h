@@ -14,7 +14,7 @@ class Sensor {
 private:
     uint8_t powerPin;
     uint8_t dataPin;
-    long data;
+    unsigned int data;
     char *macAddress;
     char *sensorType;
 
@@ -27,7 +27,7 @@ public:
 
     ~Sensor();
 
-    long updateDataViaPin(int samples);
+    unsigned int updateDataViaPin(int samples);
 
     int updateDataViaMacAddress();
 

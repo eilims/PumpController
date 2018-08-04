@@ -31,7 +31,7 @@ Sensor::~Sensor() {
 
 }
 
-long Sensor::updateDataViaPin(int samples) {
+unsigned int Sensor::updateDataViaPin(int samples) {
     digitalWrite(powerPin, HIGH);
     delay(10);
 	this->data = 0;
