@@ -17,7 +17,7 @@ Sensor::Sensor(uint8_t powerPin, uint8_t dataPin) {
     this->data = 0;
     this->macAddress = NULL;
     this->sensorType = NULL;
-    pinMode(this->dataPin, OUTPUT);
+    pinMode(this->powerPin, OUTPUT);
 }
 
 Sensor::Sensor(char *macAddress) {
@@ -31,10 +31,16 @@ Sensor::~Sensor() {
 
 }
 
-int Sensor::updateDataViaPin() {
+long Sensor::updateDataViaPin(int samples) {
     digitalWrite(powerPin, HIGH);
-    delay(1000);
-    this->data = analogRead(this->dataPin);
+    delay(10);
+	this->data = 0;
+	for(int i = 0; i < samples; i++){
+		int temp = analogRead(this->dataPin);
+		this->data += temp;
+		delay(1);
+	}
+	this->data = this->data / samples;
 	digitalWrite(powerPin, LOW);
     return this->data;
 }
