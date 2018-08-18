@@ -8,10 +8,16 @@ SensorList::SensorList() {
     this->sensorList = new LinkedList<Sensor>();
 }
 
-SensorList::~SensorList() = default;
+SensorList::~SensorList(){
+	delete(sensorList);
+}
 
 LinkedList<Sensor> *SensorList::getList() {
     return this->sensorList;
+}
+
+void SensorList::addSensor(Sensor *sensor){
+	this->sensorList->insertItem(sensor);
 }
 
 unsigned int SensorList::getSensorDataMin(int samples) {

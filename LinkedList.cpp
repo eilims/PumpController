@@ -14,7 +14,11 @@ LinkedList<T>::LinkedList() {
 
 template<class T>
 LinkedList<T>::~LinkedList() {
-
+	Node<T> *temp = this->head;
+	for(int i; i < this->length; i++){
+		delete(temp);
+		temp = temp->getNext();
+	}
 }
 
 //Usable Methods
