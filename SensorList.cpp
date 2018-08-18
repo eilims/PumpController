@@ -14,11 +14,11 @@ LinkedList<Sensor> *SensorList::getList() {
     return this->sensorList;
 }
 
-unsigned int SensorList::getSensorDataMin() {
+unsigned int SensorList::getSensorDataMin(int samples) {
     Node<Sensor> *temp = this->sensorList->getHeadNode();
-    unsigned int min = temp->getItem()->updateDataViaPin(20);
+    unsigned int min = temp->getItem()->updateDataViaPin(samples);
     for (int i = 1; i < this->sensorList->getLength(); i++) {
-        int tempData = temp->getItem()->updateDataViaPin(20);
+        unsigned int tempData = temp->getItem()->updateDataViaPin(samples);
         if(tempData < min){
             min = tempData;
         }
@@ -27,21 +27,21 @@ unsigned int SensorList::getSensorDataMin() {
     return min;
 }
 
-unsigned int SensorList::getSensorDataAverage() {
+unsigned int SensorList::getSensorDataAverage(int samples) {
     unsigned int data = 0;
     Node<Sensor> *temp = this->sensorList->getHeadNode();
     for (int i = 0; i < this->sensorList->getLength(); i++) {
-        data += temp->getItem()->updateDataViaPin(20);
+        data += temp->getItem()->updateDataViaPin(samples);
         temp = temp->getNext();
     }
     return data/this->sensorList->getLength();
 }
 
-unsigned int SensorList::getSensorDataMax() {
+unsigned int SensorList::getSensorDataMax(int samples) {
     Node<Sensor> *temp = this->sensorList->getHeadNode();
-    unsigned int max = temp->getItem()->updateDataViaPin(20);
+    unsigned int max = temp->getItem()->updateDataViaPin(samples);
     for (int i = 1; i < this->sensorList->getLength(); i++) {
-        unsigned int tempData = temp->getItem()->updateDataViaPin(20);
+        unsigned int tempData = temp->getItem()->updateDataViaPin(samples);
         if(tempData > max){
             max = tempData;
         }

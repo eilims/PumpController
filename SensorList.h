@@ -21,11 +21,11 @@ public:
 
     LinkedList<Sensor>* getList();
 
-    unsigned int getSensorDataMin();
+    unsigned int getSensorDataMin(int samples);
 
-    unsigned int getSensorDataAverage();
+    unsigned int getSensorDataAverage(int samples);
 
-    unsigned int getSensorDataMax();
+    unsigned int getSensorDataMax(int samples);
 
 };
 
