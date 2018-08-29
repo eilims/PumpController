@@ -16,6 +16,13 @@ Pump::~Pump() {
 
 }
 
+void Pump::startPump(uint8_t pumpStrength) {
+    digitalWrite(this->topControlPin, HIGH);
+    digitalWrite(this->bottomControlPin, LOW);
+    analogWrite(this->enablePin, pumpStrength);
+}
+
+
 //Strength refers to an analog value between 0 - 255
 void Pump::runPump(int timeInMilliSeconds, uint8_t maxStrength, uint8_t minimumStrength, uint8_t strengthChange, int strengthChangeInterval) {
     this->timer = millis();
@@ -56,10 +63,10 @@ void Pump::runPump(int timeInMilliSeconds, uint8_t maxStrength, uint8_t minimumS
         }
 		analogWrite(this->enablePin, currentStrength);
     }
-	turnOffPump();
+    stopPump();
 }
 
-void Pump::turnOffPump() {
+void Pump::stopPump() {
     analogWrite(this->enablePin, 0);
     digitalWrite(this->topControlPin, LOW);
 }

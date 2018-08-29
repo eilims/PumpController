@@ -11,20 +11,20 @@ Sensor::Sensor() {
     this->sensorType = NULL;
 }
 
-Sensor::Sensor(uint8_t powerPin, uint8_t dataPin) {
+Sensor::Sensor(uint8_t powerPin, uint8_t dataPin, char* sensorType) {
     this->powerPin = powerPin;
     this->dataPin = dataPin;
     this->data = 0;
     this->macAddress = NULL;
-    this->sensorType = NULL;
+    this->sensorType = sensorType;
     pinMode(this->powerPin, OUTPUT);
 }
 
-Sensor::Sensor(char *macAddress) {
+Sensor::Sensor(char *macAddress, char* sensorType) {
     this->dataPin = 0;
     this->data = 0;
     this->macAddress = macAddress;
-    this->sensorType = NULL;
+    this->sensorType = sensorType;
 }
 
 Sensor::~Sensor() {

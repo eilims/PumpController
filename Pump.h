@@ -23,10 +23,12 @@ public:
 
     ~Pump();
 
+    void startPump(uint8_t pumpStrength);
+
     void runPump(int timeInMilliSeconds, uint8_t maxStrength, uint8_t minimumStrength, uint8_t strengthChange,
                  int waterStrengthChangeInterval);
 
-    void turnOffPump();
+    void stopPump();
 
 
     //Getters

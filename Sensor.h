@@ -21,9 +21,9 @@ private:
 public:
     Sensor();
 
-    Sensor(uint8_t powerPin, uint8_t dataPin);
+    Sensor(uint8_t powerPin, uint8_t dataPin, char* sensorType);
 
-    Sensor(char *macAddress);
+    Sensor(char *macAddress, char* sensorType);
 
     ~Sensor();
 
