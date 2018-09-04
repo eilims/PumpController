@@ -23,6 +23,7 @@ void SensorList::addSensor(Sensor *sensor){
 unsigned int SensorList::getSensorDataMin(int samples) {
     Node<Sensor> *temp = this->sensorList->getHeadNode();
     unsigned int min = temp->getItem()->updateDataViaPin(samples);
+	temp = temp->getNext();
     for (int i = 1; i < this->sensorList->getLength(); i++) {
         unsigned int tempData = temp->getItem()->updateDataViaPin(samples);
         if(tempData < min){
@@ -46,6 +47,7 @@ unsigned int SensorList::getSensorDataAverage(int samples) {
 unsigned int SensorList::getSensorDataMax(int samples) {
     Node<Sensor> *temp = this->sensorList->getHeadNode();
     unsigned int max = temp->getItem()->updateDataViaPin(samples);
+	temp = temp->getNext();
     for (int i = 1; i < this->sensorList->getLength(); i++) {
         unsigned int tempData = temp->getItem()->updateDataViaPin(samples);
         if(tempData > max){
