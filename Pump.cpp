@@ -16,10 +16,24 @@ Pump::~Pump() {
 
 }
 
+
 void Pump::startPump(uint8_t pumpStrength) {
     digitalWrite(this->topControlPin, HIGH);
     digitalWrite(this->bottomControlPin, LOW);
-    analogWrite(this->enablePin, pumpStrength);
+    //Activate Phase correct PWM
+    uint8_t temp = TCCR0A;
+    temp = temp & 0x0C;
+    TCCR0A = temp | 0x81;
+
+    temp = TCCR0B;
+    temp = temp & 0x30;
+    TCCR0B = temp | 0x04;
+
+    //Enable Interrupt
+    temp = TIMSK0 & 0xF8;
+    TIMSK0 = temp | 0x01;
+
+    OCR0A = pumpStrength;
 }
 
 
