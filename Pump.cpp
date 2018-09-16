@@ -10,6 +10,7 @@ Pump::Pump(uint8_t enablePin, uint8_t topControlPin, uint8_t bottomControlPin) {
     this->bottomControlPin = bottomControlPin;
     pinMode(this->topControlPin, OUTPUT);
     pinMode(this->bottomControlPin, OUTPUT);
+	pinMode(this->enablePin, OUTPUT);
 }
 
 Pump::~Pump() {
@@ -27,7 +28,7 @@ void Pump::startPump(uint8_t pumpStrength) {
 
     temp = TCCR0B;
     temp = temp & 0x30;
-    TCCR0B = temp | 0x04;
+    TCCR0B = temp | 0x01;
 
     //Enable Interrupt
     temp = TIMSK0 & 0xF8;
@@ -81,6 +82,17 @@ void Pump::runPump(int timeInMilliSeconds, uint8_t maxStrength, uint8_t minimumS
 }
 
 void Pump::stopPump() {
+	//disconnect timer
+	uint8_t temp = TCCR0A;
+    temp = temp & 0x0C;
+    TCCR0A = temp | 0x03;
+	//reset prescaler
+	temp = TCCR0B;
+    temp = temp & 0x30;
+    TCCR0B = temp | 0x03;
+	//Keep interrupt enabled for normal operations
+	temp = TIMSK0 & 0xF8;
+    TIMSK0 = temp | 0x01;
     analogWrite(this->enablePin, 0);
     digitalWrite(this->topControlPin, LOW);
 }
@@ -111,4 +123,7 @@ void Pump::setTopControlPin(uint8_t topControlPin) {
 
 void Pump::setBottomControlPin(uint8_t bottomControlPin) {
     this->bottomControlPin = bottomControlPin;
+}
+
+ISR(TIMER2_OVF_vect){
 }

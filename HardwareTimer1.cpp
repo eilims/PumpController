@@ -80,6 +80,9 @@ void HardwareTimer1::startTimer1(int state) {
 		case 0:
 			CLKPR = 0x00;
 			break;
+		case 2:
+			CLKPR = 0x02;
+			break;
 		case 8: 
 			CLKPR = 0x08;
 			break;
