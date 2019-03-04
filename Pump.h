@@ -23,6 +23,10 @@ public:
 
     ~Pump();
 
+    void setPower(uint8_t power);
+
+    void runSolenoid(int timeInMilliseconds);    
+
     void startPump(uint8_t pumpStrength);
 
     void runPump(int timeInMilliSeconds, uint8_t maxStrength, uint8_t minimumStrength, uint8_t strengthChange,
