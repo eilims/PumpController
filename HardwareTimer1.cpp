@@ -72,18 +72,21 @@ HardwareTimer1* HardwareTimer1::Instance() {
 
 void HardwareTimer1::startTimer1(int state) {
 	noInterrupts();
-    //Changes the global clock speed down to allow for longer/shorter timer durations
+    //Inform processor that clock speed will change
     CLKPR = 0x80;
 	//see http://ww1.microchip.com/downloads/en/DeviceDoc/Atmel-42735-8-bit-AVR-Microcontroller-ATmega328-328P_Datasheet.pdf
 	//For a breakdown of the Clock prescalar select on page 60
 	switch(state){
 		case 0:
+			// Prescale of 0
 			CLKPR = 0x00;
 			break;
 		case 2:
+			// Prescale of 4
 			CLKPR = 0x02;
 			break;
 		case 8: 
+			// Prescale of 256
 			CLKPR = 0x08;
 			break;
 		default:
@@ -100,7 +103,7 @@ void HardwareTimer1::startTimer1(int state) {
 
 void HardwareTimer1::stopTimer1() {
 	noInterrupts();
-    //Changes the global clock speed down to allow for longer/shorter timer durations
+	//Inform processor that clock speed will change
     CLKPR = 0x80;
 	//see http://ww1.microchip.com/downloads/en/DeviceDoc/Atmel-42735-8-bit-AVR-Microcontroller-ATmega328-328P_Datasheet.pdf
 	//For a breakdown of the Clock prescalar select on page 60

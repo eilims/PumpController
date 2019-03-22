@@ -17,22 +17,18 @@ Pump::~Pump() {
 
 }
 
-void Pump::setPower(uint8_t power){
-    analogWrite(this->enablePin, power);
-}
-
 void Pump::runSolenoid(int timeInMilliseconds){
     digitalWrite(5, HIGH);
     digitalWrite(4, LOW);
     // Warm up
     for(int i = 0; i < 255; i++){
-        setPower(i);
+        startPump(i);
         delay(20);
     }
     delay(timeInMilliseconds);
     // Cool Down
     for(int i = 0; i < 255; i++){
-        setPower(255 - i);
+        startPump(255 - i);
         delay(20);
     }
     digitalWrite(5, LOW);

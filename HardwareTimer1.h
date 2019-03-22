@@ -10,7 +10,25 @@
 
 typedef void (*callback_function)(void);
 
-
+/*
+ * Description of timer calculation function and example
+ * Prescaler for timer is at clk / 1024
+ * Prescaler for clock can be: 0 - 256 (powers of 2)
+ * System clock is 16 MHz
+ * ocaValue defines number before making an ISR call
+ * timerCompare defines the number of ISR calls needed before calling the given function
+ * Time calculation function (with 256 clock prescale, ocaValue of 0xFFFF, and timerCompare of 0):
+ * This means the given function will be called when the ISR if first called after the timer
+ * counts up to 0xFFFF.
+ * timer_clock_speed_MHz = (16MHz / (256 * 1024))
+ * ISR_call_rate_MHz = timer_clock_speed_MHz / 65536
+ * timer_until_function_call_s = 1 / (ISR_call_rate_MHz * (0 + 1)) Note: 0 is timerCompare + 1 for nonzero effect
+ * This is roughly 1073 seconds
+ * time_s = (256 * 1024 * 65536 * (0 + 1)) / (16MHz)
+ * Calculation of 1 second ocaValue
+ * ocaValue = ((16MHz * 1s)/(256 * 1024))
+ * This is roughly 61 
+ */
 class HardwareTimer1 {
 private:
 	//Constructors and deconstructors are private for singleton gurantee
@@ -22,13 +40,13 @@ private:
 	
 	
 	//General variables
-	//Number of times the timer hit OCR1A
+	//Number of times the timer called ISR
     int timerCount;
-	//User selected number of times required to trigger user callback 
+	// Number of ISR triggers required to trigger user callback function
     int timerCompare;
-	//User set value where Interrupt Service Routine (ISR) is triggered when the timer counts up
+	// Number of clock ticks to trigger Interrupt Service Routine (ISR)
 	uint16_t ocaValue;
-	//Allows for the later callback of user defined functions when the ISR is triggered and all conditions met
+	// Function to be called when timerCount == timerCompare
 	callback_function timerInterruptCallback;
 	
 	//Some constants for timer control
