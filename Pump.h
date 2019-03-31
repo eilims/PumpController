@@ -25,7 +25,7 @@ public:
 
     void setPower(uint8_t power);
 
-    void runSolenoid(int timeInMilliseconds);    
+    void runSolenoid(unsigned long timeInMilliseconds);    
 
     void startPump(uint8_t pumpStrength);
 

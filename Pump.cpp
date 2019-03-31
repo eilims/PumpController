@@ -17,20 +17,13 @@ Pump::~Pump() {
 
 }
 
-void Pump::runSolenoid(int timeInMilliseconds){
+void Pump::runSolenoid(unsigned long timeInMilliseconds){
     digitalWrite(5, HIGH);
     digitalWrite(4, LOW);
-    // Warm up
-    for(int i = 0; i < 255; i++){
-        startPump(i);
-        delay(20);
-    }
-    delay(timeInMilliseconds);
-    // Cool Down
-    for(int i = 0; i < 255; i++){
-        startPump(255 - i);
-        delay(20);
-    }
+	startPump(255);
+	//Check if watering time has been met
+	delay(timeInMilliseconds);
+	stopPump();
     digitalWrite(5, LOW);
     digitalWrite(4, LOW);
 }
@@ -45,7 +38,7 @@ void Pump::startPump(uint8_t pumpStrength) {
 
     temp = TCCR0B;
     temp = temp & 0x30;
-    TCCR0B = temp | 0x01;
+    TCCR0B = temp | 0x09;
 
     //Enable Interrupt
     temp = TIMSK0 & 0xF8;
